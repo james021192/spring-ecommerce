@@ -90,6 +90,7 @@ public class UsuarioController {
 	}
 	
 	
+	
 	@GetMapping("/compras")
 	public String obtenerCompras(Model model,HttpSession session) {
 		model.addAttribute("sesion", session.getAttribute("idusuario"));
@@ -98,6 +99,7 @@ public class UsuarioController {
 		model.addAttribute("ordenes", ordenes);
 		return "usuario/compras";
 	}
+	
 	
 	@GetMapping("/detalle/{id}")
 	public String detalleCompras(@PathVariable Integer id,HttpSession session,Model model) {
@@ -108,5 +110,13 @@ public class UsuarioController {
 		model.addAttribute("sesion",session.getAttribute("idusuario"));
 		return "usuario/detallecompra";
 	}
+	
+	
+	@GetMapping("/cerrar")
+	public String cerrarSession(HttpSession session) {
+		session.removeAttribute("idusuario");
+		return "redirect:/";
+	}
+	
 	
 }
