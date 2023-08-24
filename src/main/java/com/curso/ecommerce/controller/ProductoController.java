@@ -3,7 +3,10 @@ package com.curso.ecommerce.controller;
 import java.io.IOException;
 import java.util.Optional;
 
-import org.slf4j.*;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,8 +22,6 @@ import com.curso.ecommerce.model.Usuario;
 import com.curso.ecommerce.service.IUsuarioService;
 import com.curso.ecommerce.service.ProductoService;
 import com.curso.ecommerce.service.UploadFileService;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/productos")
