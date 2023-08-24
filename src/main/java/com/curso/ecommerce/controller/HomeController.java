@@ -27,6 +27,8 @@ import com.curso.ecommerce.service.IOrdenService;
 import com.curso.ecommerce.service.IUsuarioService;
 import com.curso.ecommerce.service.ProductoService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/")
 public class HomeController {
@@ -52,8 +54,11 @@ public class HomeController {
 	Orden orden = new Orden();
 
 	@GetMapping("")
-	public String home(Model model) {
+	public String home(Model model,HttpSession session) {
+		log.info("Session del usuario: {}",session.getAttribute("idusuario"));
 		model.addAttribute("productos", productoService.findAll());
+		//session
+		model.addAttribute("sesion", session.getAttribute("idusuario"));
 		return "usuario/home";
 	}
 
@@ -119,15 +124,19 @@ public class HomeController {
 	}
 
 	@GetMapping("/getCart")
-	public String getCart(Model model) {
+	public String getCart(Model model,HttpSession session) {
+		
 		model.addAttribute("cart",detalles);
 		model.addAttribute("orden",orden);
+		//session
+		model.addAttribute("sesion",session.getAttribute("idusuario"));
 		return "/usuario/carrito";
 	}
 	
 	@GetMapping("/order")
-	public String order(Model model) {
-		Usuario usuario=usuarioService.findById(1).get();
+	public String order(Model model,HttpSession session) {
+		Usuario usuario=usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
+		
 		model.addAttribute("cart",detalles);
 		model.addAttribute("orden",orden);
 		model.addAttribute("usuario",usuario);
@@ -136,13 +145,14 @@ public class HomeController {
 	
 	//guardar la orden
 	@GetMapping("/saveOrder")
-	public String saveOrder() {
+	public String saveOrder(HttpSession session) {
 		Date fechaCreacion=new Date();	
 		orden.setFechaCreacion(fechaCreacion);
 		orden.setNumero(ordenService.generarNumeroOrden());
 		
 		//usuario
-		Usuario usuario=usuarioService.findById(1).get();
+		Usuario usuario=usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
+		
 		orden.setUsuario(usuario);
 		ordenService.save(orden);
 		//guardar detalles
